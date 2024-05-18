@@ -1,3 +1,7 @@
+import { errorHandler } from '@/http/error-handler'
+import { authenticateWithPassword } from '@/http/routes/auth/authenticate-with-password'
+import { createAccount } from '@/http/routes/auth/create-account'
+import { getProfile } from '@/http/routes/auth/get-profile'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
@@ -9,13 +13,15 @@ import {
   validatorCompiler,
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
-import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
-import { createAccount } from './routes/auth/create-account'
+import { requestPasswordRecover } from './routes/auth/request-password-recover'
+import { resetPassword } from './routes/auth/reset-password'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
+
+app.setErrorHandler(errorHandler)
 
 app.register(fastifySwagger, {
   openapi: {
@@ -41,6 +47,9 @@ app.register(fastifyCors)
 
 app.register(createAccount)
 app.register(authenticateWithPassword)
+app.register(getProfile)
+app.register(requestPasswordRecover)
+app.register(resetPassword)
 
 app.listen({ port: 3333 }).then(() => {
   console.log(`Server listening on http://localhost:3333`)
