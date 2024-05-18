@@ -7,6 +7,7 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "turbo": "latest"
   },
   "engines": {
@@ -19,6 +20,7 @@
     "config/*"
   ],
   "dependencies": {
-    "@casl/ability": "^6.7.1"
+    "@casl/ability": "^6.7.1",
+    "bcryptjs": "^2.4.3"
   }
 }
