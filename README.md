@@ -79,3 +79,9 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 - [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+### Permissions table
+
+|                     | Admin              | Member | Billing | Anonymous |
+| ------------------- | ------------------ | ------ | ------- | --------- |
+| Update organization | :white_check_mark: | :x:    | :x:     | :x:       |
