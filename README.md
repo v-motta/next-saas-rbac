@@ -98,3 +98,7 @@ Learn more about the power of Turborepo:
 | Delete a project       | :white_check_mark: | :warning:          | :x:                | :x:       |
 | Get billing details    | :white_check_mark: | :x:                | :white_check_mark: | :x:       |
 | Export billing details | :white_check_mark: | :x:                | :white_check_mark: | :x:       |
+
+> :white_check_mark: = allowed
+> :x: = not allowed
+> :warning: = allowed w/ confitions
