@@ -82,6 +82,19 @@ Learn more about the power of Turborepo:
 
 ### Permissions table
 
-|                     | Admin              | Member | Billing | Anonymous |
-| ------------------- | ------------------ | ------ | ------- | --------- |
-| Update organization | :white_check_mark: | :x:    | :x:     | :x:       |
+|                        | Admin              | Member             | Billing            | Anonymous |
+| ---------------------- | ------------------ | ------------------ | ------------------ | --------- |
+| Update organization    | :white_check_mark: | :x:                | :x:                | :x:       |
+| Delete organization    | :white_check_mark: | :x:                | :x:                | :x:       |
+| Invite a member        | :white_check_mark: | :x:                | :x:                | :x:       |
+| Revoke an invite       | :white_check_mark: | :x:                | :x:                | :x:       |
+| List member            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:       |
+| Transfer ownership     | :warning:          | :x:                | :x:                | :x:       |
+| Update member role     | :white_check_mark: | :x:                | :x:                | :x:       |
+| Delete member          | :white_check_mark: | :warning:          | :x:                | :x:       |
+| List projects          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:       |
+| Create a new project   | :white_check_mark: | :white_check_mark: | :x:                | :x:       |
+| Update a project       | :white_check_mark: | :warning:          | :x:                | :x:       |
+| Delete a project       | :white_check_mark: | :warning:          | :x:                | :x:       |
+| Get billing details    | :white_check_mark: | :x:                | :white_check_mark: | :x:       |
+| Export billing details | :white_check_mark: | :x:                | :white_check_mark: | :x:       |
