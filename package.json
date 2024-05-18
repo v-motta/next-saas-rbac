@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@casl/ability": "^6.7.1",
+    "@fastify/swagger-ui": "^3.0.0",
     "bcryptjs": "^2.4.3"
   }
 }
