@@ -11,9 +11,9 @@ async function seed() {
   const [user1, user2, user3] = await prisma.user.createManyAndReturn({
     data: [
       {
-        name: 'Vinicius Motta',
-        email: 'viniciusmotta0806@gmail.com',
-        avatarUrl: 'http://github.com/v-motta.png',
+        name: 'Vinicius',
+        email: 'vinicius@motta.com',
+        avatarUrl: faker.image.avatarGitHub(),
         passwordHash: await hash('123456', 1),
       },
       {
