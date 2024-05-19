@@ -17,7 +17,7 @@ model User {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   tokens             Token[]
-  accounts           Acconut[]
+  accounts           Account[]
   invites            Invite[]
   member_on          Member[]
   owns_organizations Organization[]
@@ -45,7 +45,7 @@ enum AccountProvider {
   GITHUB
 }
 
-model Acconut {
+model Account {
   id                String          @id @default(uuid())
   provider          AccountProvider
   providerAccountId String          @unique @map("provider_account_id")
