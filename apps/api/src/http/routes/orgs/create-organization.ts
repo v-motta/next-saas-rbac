@@ -12,7 +12,7 @@ export async function createOrganization(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/organization',
+      '/organizations',
       {
         schema: {
           tags: ['organizations'],
@@ -24,7 +24,7 @@ export async function createOrganization(app: FastifyInstance) {
             shouldAttachUsersByDomain: z.boolean().optional(),
           }),
           response: {
-            '201': z.object({
+            201: z.object({
               organizationId: z.string().uuid(),
             }),
           },
