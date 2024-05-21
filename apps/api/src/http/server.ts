@@ -6,6 +6,11 @@ import { getProfile } from '@/http/routes/auth/get-profile'
 import { requestPasswordRecover } from '@/http/routes/auth/request-password-recover'
 import { resetPassword } from '@/http/routes/auth/reset-password'
 import { createOrganization } from '@/http/routes/orgs/create-organization'
+import { getMembership } from '@/http/routes/orgs/get-membership'
+import { getOrganization } from '@/http/routes/orgs/get-organization'
+import { getOrganizations } from '@/http/routes/orgs/get-organizations'
+import { shutdownOrganization } from '@/http/routes/orgs/shutdown-organization'
+import { updateOrganization } from '@/http/routes/orgs/update-organization'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
@@ -62,10 +67,17 @@ app.register(authenticateWithGithub)
 app.register(authenticateWithPassword)
 app.register(requestPasswordRecover)
 app.register(resetPassword)
+
+// profile routes
 app.register(getProfile)
 
 // org routes
 app.register(createOrganization)
+app.register(getMembership)
+app.register(getOrganization)
+app.register(getOrganizations)
+app.register(updateOrganization)
+app.register(shutdownOrganization)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server listening on http://localhost:${env.SERVER_PORT}`)
