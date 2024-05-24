@@ -15,6 +15,8 @@ import { updateOrganization } from '@/http/routes/orgs/update-organization'
 import { createProject } from '@/http/routes/projects/create-project'
 import { deleteProject } from '@/http/routes/projects/delete-project'
 import { getProject } from '@/http/routes/projects/get-project'
+import { getProjects } from '@/http/routes/projects/get-projects'
+import { updateProject } from '@/http/routes/projects/update-project'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
@@ -27,7 +29,6 @@ import {
   validatorCompiler,
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
-import { getProjects } from '@/http/routes/projects/get-projects'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -90,6 +91,7 @@ app.register(createProject)
 app.register(deleteProject)
 app.register(getProject)
 app.register(getProjects)
+app.register(updateProject)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server listening on http://localhost:${env.SERVER_PORT}`)
