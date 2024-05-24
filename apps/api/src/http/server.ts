@@ -25,6 +25,7 @@ import {
   validatorCompiler,
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import { getProjects } from '@/http/routes/projects/get-projects'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
