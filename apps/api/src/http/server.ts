@@ -87,6 +87,9 @@ app.register(transferOrganization)
 
 // project routes
 app.register(createProject)
+app.register(deleteProject)
+app.register(getProject)
+app.register(getProjects)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server listening on http://localhost:${env.SERVER_PORT}`)
