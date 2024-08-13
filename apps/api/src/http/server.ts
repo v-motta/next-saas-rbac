@@ -1,25 +1,3 @@
-import { errorHandler } from '@/http/error-handler'
-import { authenticateWithGithub } from '@/http/routes/auth/authenticate-with-github'
-import { authenticateWithPassword } from '@/http/routes/auth/authenticate-with-password'
-import { createAccount } from '@/http/routes/auth/create-account'
-import { getProfile } from '@/http/routes/auth/get-profile'
-import { requestPasswordRecover } from '@/http/routes/auth/request-password-recover'
-import { resetPassword } from '@/http/routes/auth/reset-password'
-import { getMembers } from '@/http/routes/members/get-members'
-import { removeMember } from '@/http/routes/members/remove-member'
-import { updateMember } from '@/http/routes/members/update-member'
-import { createOrganization } from '@/http/routes/orgs/create-organization'
-import { getMembership } from '@/http/routes/orgs/get-membership'
-import { getOrganization } from '@/http/routes/orgs/get-organization'
-import { getOrganizations } from '@/http/routes/orgs/get-organizations'
-import { shutdownOrganization } from '@/http/routes/orgs/shutdown-organization'
-import { transferOrganization } from '@/http/routes/orgs/transfer-organization'
-import { updateOrganization } from '@/http/routes/orgs/update-organization'
-import { createProject } from '@/http/routes/projects/create-project'
-import { deleteProject } from '@/http/routes/projects/delete-project'
-import { getProject } from '@/http/routes/projects/get-project'
-import { getProjects } from '@/http/routes/projects/get-projects'
-import { updateProject } from '@/http/routes/projects/update-project'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
@@ -32,6 +10,29 @@ import {
   validatorCompiler,
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import { errorHandler } from './error-handler'
+import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
+import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
+import { createAccount } from './routes/auth/create-account'
+import { getProfile } from './routes/auth/get-profile'
+import { requestPasswordRecover } from './routes/auth/request-password-recover'
+import { resetPassword } from './routes/auth/reset-password'
+import { createInvite } from './routes/invites/create-invite'
+import { getMembers } from './routes/members/get-members'
+import { removeMember } from './routes/members/remove-member'
+import { updateMember } from './routes/members/update-member'
+import { createOrganization } from './routes/orgs/create-organization'
+import { getMembership } from './routes/orgs/get-membership'
+import { getOrganization } from './routes/orgs/get-organization'
+import { getOrganizations } from './routes/orgs/get-organizations'
+import { shutdownOrganization } from './routes/orgs/shutdown-organization'
+import { transferOrganization } from './routes/orgs/transfer-organization'
+import { updateOrganization } from './routes/orgs/update-organization'
+import { createProject } from './routes/projects/create-project'
+import { deleteProject } from './routes/projects/delete-project'
+import { getProject } from './routes/projects/get-project'
+import { getProjects } from './routes/projects/get-projects'
+import { updateProject } from './routes/projects/update-project'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -100,6 +101,9 @@ app.register(updateProject)
 app.register(getMembers)
 app.register(updateMember)
 app.register(removeMember)
+
+// invite routes
+app.register(createInvite)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server listening on http://localhost:${env.SERVER_PORT}`)
