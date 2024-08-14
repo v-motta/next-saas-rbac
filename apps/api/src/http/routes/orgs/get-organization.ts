@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { z } from 'zod'
 
 export async function getOrganization(app: FastifyInstance) {
   app
@@ -41,6 +41,6 @@ export async function getOrganization(app: FastifyInstance) {
         const { organization } = await request.getUserMembership(slug)
 
         return { organization }
-      }
+      },
     )
 }

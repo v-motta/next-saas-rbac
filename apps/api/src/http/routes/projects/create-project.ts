@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { createSlug } from '@/utils/create-slug'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { z } from 'zod'
 
 export async function createProject(app: FastifyInstance) {
   app
@@ -43,7 +43,7 @@ export async function createProject(app: FastifyInstance) {
 
         if (cannot('create', 'Project')) {
           throw new UnauthorizationError(
-            'You are not allowed to create projects'
+            'You are not allowed to create projects',
           )
         }
 
@@ -60,6 +60,6 @@ export async function createProject(app: FastifyInstance) {
         })
 
         return reply.status(201).send({ projectId: project.id })
-      }
+      },
     )
 }

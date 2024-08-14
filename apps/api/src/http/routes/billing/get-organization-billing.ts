@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { z } from 'zod'
-import { getUserPermissions } from '@/utils/get-user-permissions'
-import { UnauthorizationError } from '../_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
+import { getUserPermissions } from '@/utils/get-user-permissions'
+
+import { UnauthorizationError } from '../_errors/unauthorized-error'
 
 export async function getOrganizationBilling(app: FastifyInstance) {
   app
@@ -24,17 +25,17 @@ export async function getOrganizationBilling(app: FastifyInstance) {
           response: {
             200: z.object({
               billing: z.object({
-                  seats: z.object({
-                      amount: z.number(),
-                      unit: z.number(),
-                      price: z.number(),
-                  }),
-                  projects: z.object({
-                      amount: z.number(),
-                      unit: z.number(),
-                      price: z.number(),
-                  }),
-                  total: z.number(),
+                seats: z.object({
+                  amount: z.number(),
+                  unit: z.number(),
+                  price: z.number(),
+                }),
+                projects: z.object({
+                  amount: z.number(),
+                  unit: z.number(),
+                  price: z.number(),
+                }),
+                total: z.number(),
               }),
             }),
           },
@@ -43,13 +44,14 @@ export async function getOrganizationBilling(app: FastifyInstance) {
       async (request) => {
         const { slug } = request.params
         const userId = await request.getCurrentUserId()
-        const { organization, membership } = await request.getUserMembership(slug)
+        const { organization, membership } =
+          await request.getUserMembership(slug)
 
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'Billing')) {
           throw new UnauthorizationError(
-            'You are not allowed to get billing details from this organization.'
+            'You are not allowed to get billing details from this organization.',
           )
         }
 
@@ -57,7 +59,7 @@ export async function getOrganizationBilling(app: FastifyInstance) {
           prisma.member.count({
             where: {
               organizationId: organization.id,
-              role: { not: 'billing'}
+              role: { not: 'billing' },
             },
           }),
 
@@ -65,7 +67,7 @@ export async function getOrganizationBilling(app: FastifyInstance) {
             where: {
               organizationId: organization.id,
             },
-          })
+          }),
         ])
 
         return {
@@ -73,16 +75,16 @@ export async function getOrganizationBilling(app: FastifyInstance) {
             seats: {
               amount: amountOfMembers,
               unit: 10,
-              price: amountOfMembers * 10
+              price: amountOfMembers * 10,
             },
             projects: {
               amount: amountOfProjects,
               unit: 20,
-              price: amountOfProjects * 20
+              price: amountOfProjects * 20,
             },
             total: amountOfMembers * 10 + amountOfProjects * 20,
-          }
+          },
         }
-      }
+      },
     )
 }

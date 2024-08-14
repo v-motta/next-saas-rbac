@@ -1,13 +1,12 @@
+import { roleSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { z } from 'zod'
-import { roleSchema } from '@saas/auth'
-import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function getInvites(app: FastifyInstance) {
   app
@@ -31,12 +30,14 @@ export async function getInvites(app: FastifyInstance) {
                   role: roleSchema,
                   email: z.string().email(),
                   createdAt: z.date(),
-                  author: z.object({
+                  author: z
+                    .object({
                       id: z.string().uuid(),
                       name: z.string().nullable(),
-                  }).nullable(),
+                    })
+                    .nullable(),
                 }),
-              )
+              ),
             }),
           },
         },
@@ -51,7 +52,7 @@ export async function getInvites(app: FastifyInstance) {
 
         if (cannot('get', 'Invite')) {
           throw new UnauthorizationError(
-            'You are not allowed to get organization invites.'
+            'You are not allowed to get organization invites.',
           )
         }
 
@@ -69,7 +70,7 @@ export async function getInvites(app: FastifyInstance) {
                 id: true,
                 name: true,
               },
-            }
+            },
           },
           orderBy: {
             createdAt: 'desc',
@@ -77,6 +78,6 @@ export async function getInvites(app: FastifyInstance) {
         })
 
         return { invites }
-      }
+      },
     )
 }

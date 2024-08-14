@@ -1,13 +1,17 @@
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
-import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-import { BadRequestError } from '../_errors/bad-request-error'
+
 import { auth } from '@/http/middlewares/auth'
+import { prisma } from '@/lib/prisma'
+
+import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function acceptInvite(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().register(auth).post(
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
       '/invites/:inviteId/accept',
       {
         schema: {
@@ -46,9 +50,7 @@ export async function acceptInvite(app: FastifyInstance) {
         }
 
         if (invite.email !== user.email) {
-          throw new BadRequestError(
-            'This invite belongs to another user.'
-          )
+          throw new BadRequestError('This invite belongs to another user.')
         }
 
         await prisma.$transaction([
@@ -66,6 +68,6 @@ export async function acceptInvite(app: FastifyInstance) {
         ])
 
         return reply.status(204).send()
-      }
+      },
     )
 }

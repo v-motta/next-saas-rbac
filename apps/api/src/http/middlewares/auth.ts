@@ -1,8 +1,8 @@
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
-import { prisma } from '@/lib/prisma'
-
 import type { FastifyInstance } from 'fastify'
 import { fastifyPlugin } from 'fastify-plugin'
+
+import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { prisma } from '@/lib/prisma'
 
 export const auth = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request) => {
@@ -31,7 +31,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
 
       if (!member) {
         throw new UnauthorizationError(
-          "You're not a member of this organization"
+          "You're not a member of this organization",
         )
       }
 

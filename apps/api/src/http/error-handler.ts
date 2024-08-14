@@ -1,7 +1,8 @@
-import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import type { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
+
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
+import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 

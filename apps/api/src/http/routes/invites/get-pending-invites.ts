@@ -1,14 +1,18 @@
+import { roleSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
-import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-import { BadRequestError } from '../_errors/bad-request-error'
+
 import { auth } from '@/http/middlewares/auth'
-import { roleSchema } from '@saas/auth'
+import { prisma } from '@/lib/prisma'
+
+import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function getPendingInvite(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().register(auth).post(
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
       '/pending-invites',
       {
         schema: {
@@ -22,12 +26,14 @@ export async function getPendingInvite(app: FastifyInstance) {
                   role: roleSchema,
                   email: z.string().email(),
                   createdAt: z.date(),
-                  author: z.object({
+                  author: z
+                    .object({
                       id: z.string().uuid(),
                       name: z.string().nullable(),
-                  }).nullable(),
+                    })
+                    .nullable(),
                 }),
-              )
+              ),
             }),
           },
         },
@@ -73,7 +79,7 @@ export async function getPendingInvite(app: FastifyInstance) {
           throw new BadRequestError('Invite not found or expired.')
         }
 
-        return {invites}
-      }
+        return { invites }
+      },
     )
 }

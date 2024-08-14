@@ -1,12 +1,12 @@
+import { organizationSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { organizationSchema } from '@saas/auth'
-import { z } from 'zod'
 
 export async function transferOrganization(app: FastifyInstance) {
   app
@@ -43,7 +43,7 @@ export async function transferOrganization(app: FastifyInstance) {
 
         if (cannot('transfer_ownership', authOrganization)) {
           throw new UnauthorizationError(
-            "You're not authorized to transfer this organization ownership."
+            "You're not authorized to transfer this organization ownership.",
           )
         }
 
@@ -60,7 +60,7 @@ export async function transferOrganization(app: FastifyInstance) {
 
         if (!transferToMembership) {
           throw new UnauthorizationError(
-            "You're not a member of this organization"
+            "You're not a member of this organization",
           )
         }
 
@@ -86,6 +86,6 @@ export async function transferOrganization(app: FastifyInstance) {
         ])
 
         return reply.status(204).send()
-      }
+      },
     )
 }

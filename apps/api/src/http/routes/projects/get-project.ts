@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { z } from 'zod'
 
 export async function getProject(app: FastifyInstance) {
   app
@@ -83,6 +83,6 @@ export async function getProject(app: FastifyInstance) {
         }
 
         return reply.status(200).send({ project })
-      }
+      },
     )
 }

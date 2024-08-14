@@ -1,8 +1,10 @@
-import { prisma } from '@/lib/prisma'
 import { hash } from 'bcryptjs'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
+
+import { prisma } from '@/lib/prisma'
+
 import { UnauthorizationError } from '../_errors/unauthorized-error'
 
 export async function resetPassword(app: FastifyInstance) {
@@ -43,8 +45,7 @@ export async function resetPassword(app: FastifyInstance) {
         prisma.token.delete({ where: { id: code } }),
       ])
 
-
       return reply.status(204).send()
-    }
+    },
   )
 }

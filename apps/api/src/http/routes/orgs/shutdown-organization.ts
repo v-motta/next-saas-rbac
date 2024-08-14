@@ -1,12 +1,12 @@
+import { organizationSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { organizationSchema } from '@saas/auth'
-import { z } from 'zod'
 
 export async function shutdownOrganization(app: FastifyInstance) {
   app
@@ -40,7 +40,7 @@ export async function shutdownOrganization(app: FastifyInstance) {
 
         if (cannot('delete', authOrganization)) {
           throw new UnauthorizationError(
-            "You're not authorized to shutdown this organization"
+            "You're not authorized to shutdown this organization",
           )
         }
 
@@ -49,6 +49,6 @@ export async function shutdownOrganization(app: FastifyInstance) {
         })
 
         return reply.status(204).send()
-      }
+      },
     )
 }

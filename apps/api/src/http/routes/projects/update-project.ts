@@ -1,13 +1,13 @@
+import { projectSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { projectSchema } from '@saas/auth'
-import { z } from 'zod'
 
 export async function updateProject(app: FastifyInstance) {
   app
@@ -55,7 +55,7 @@ export async function updateProject(app: FastifyInstance) {
 
         if (cannot('update', authProject)) {
           throw new UnauthorizationError(
-            'You are not allowed to update this project'
+            'You are not allowed to update this project',
           )
         }
 
@@ -72,6 +72,6 @@ export async function updateProject(app: FastifyInstance) {
         })
 
         return reply.status(204).send()
-      }
+      },
     )
 }
