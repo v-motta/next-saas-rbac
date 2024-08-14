@@ -7,7 +7,6 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
     "turbo": "latest"
   },
   "engines": {
@@ -18,11 +17,5 @@
     "apps/*",
     "packages/*",
     "config/*"
-  ],
-  "dependencies": {
-    "@casl/ability": "^6.7.1",
-    "@fastify/swagger-ui": "^3.0.0",
-    "@t3-oss/env-nextjs": "^0.10.1",
-    "bcryptjs": "^2.4.3"
-  }
+  ]
 }
