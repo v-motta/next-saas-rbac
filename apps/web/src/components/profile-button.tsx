@@ -26,11 +26,11 @@ export async function ProfileButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3 outline-none">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-end">
           <span className="text-sm font-medium">{user.name}</span>
           <span className="text-xs text-muted-foreground">{user.email}</span>
         </div>
-        <Avatar>
+        <Avatar className="size-8">
           {user.avatarUrl && <AvatarImage src={user.avatarUrl} />}
           {user.name && (
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
