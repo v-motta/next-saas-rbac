@@ -1,14 +1,13 @@
 import { env } from '@saas/env'
-import type { FastifyInstance } from 'fastify'
-import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { prisma } from '@/lib/prisma'
 
 import { BadRequestError } from '../_errors/bad-request-error'
 
-export async function authenticateWithGithub(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post(
+export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
+  app.post(
     '/sessions/github',
     {
       schema: {
