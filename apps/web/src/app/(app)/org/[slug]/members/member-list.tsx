@@ -77,7 +77,6 @@ export async function MemberList() {
                           Transfer ownership
                         </Button>
                       )}
-
                       <UpdateRoleMemberSelect
                         memberId={member.id}
                         value={member.role}
@@ -87,7 +86,6 @@ export async function MemberList() {
                           permissions?.cannot('update', 'User')
                         }
                       />
-
                       {permissions?.can('delete', 'User') && (
                         <form action={removeMemberAction.bind(null, member.id)}>
                           <Button
