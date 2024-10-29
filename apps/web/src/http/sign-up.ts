@@ -6,11 +6,7 @@ interface SignUpRequest {
   password: string
 }
 
-export async function signUp({
-  name,
-  email,
-  password,
-}: SignUpRequest): Promise<void> {
+export async function signUp({ name, email, password }: SignUpRequest) {
   await api.post('users', {
     json: {
       name,

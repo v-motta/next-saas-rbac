@@ -6,23 +6,15 @@ interface CreateProjectRequest {
   description: string
 }
 
-interface CreateProjectResponse {
-  projectId: string
-}
-
 export async function createProject({
   org,
   name,
   description,
 }: CreateProjectRequest) {
-  const result = await api
-    .post(`organization/${org}/projects`, {
-      json: {
-        name,
-        description,
-      },
-    })
-    .json<CreateProjectResponse>()
-
-  return result
+  await api.post(`organizations/${org}/projects`, {
+    json: {
+      name,
+      description,
+    },
+  })
 }
