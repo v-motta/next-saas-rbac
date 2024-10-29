@@ -4,7 +4,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -16,7 +16,7 @@ export async function getMembers(app: FastifyInstance) {
       '/organizations/:slug/members',
       {
         schema: {
-          tags: ['members'],
+          tags: ['Members'],
           summary: 'Get all organization members',
           security: [{ bearerAuth: [] }],
           params: z.object({
@@ -47,7 +47,7 @@ export async function getMembers(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'User')) {
-          throw new UnauthorizationError(
+          throw new UnauthorizedError(
             `You're not allowed to see organization members.`,
           )
         }

@@ -3,7 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -15,7 +15,7 @@ export async function getProjects(app: FastifyInstance) {
       '/organizations/:slug/projects',
       {
         schema: {
-          tags: ['projects'],
+          tags: ['Projects'],
           summary: 'Get all organization projects',
           security: [{ bearerAuth: [] }],
           params: z.object({
@@ -29,10 +29,10 @@ export async function getProjects(app: FastifyInstance) {
                   description: z.string(),
                   name: z.string(),
                   slug: z.string(),
-                  ownerId: z.string(),
-                  createdAt: z.date(),
                   avatarUrl: z.string().url().nullable(),
                   organizationId: z.string().uuid(),
+                  ownerId: z.string().uuid(),
+                  createdAt: z.date(),
                   owner: z.object({
                     id: z.string().uuid(),
                     name: z.string().nullable(),
@@ -53,8 +53,8 @@ export async function getProjects(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'Project')) {
-          throw new UnauthorizationError(
-            'You are not allowed see organization projects',
+          throw new UnauthorizedError(
+            `You're not allowed to see organization projects.`,
           )
         }
 
@@ -72,6 +72,7 @@ export async function getProjects(app: FastifyInstance) {
               select: {
                 id: true,
                 name: true,
+                email: true,
                 avatarUrl: true,
               },
             },
@@ -84,7 +85,7 @@ export async function getProjects(app: FastifyInstance) {
           },
         })
 
-        return reply.status(200).send({ projects })
+        return reply.send({ projects })
       },
     )
 }

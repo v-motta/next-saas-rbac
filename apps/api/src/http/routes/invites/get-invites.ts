@@ -4,7 +4,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -16,8 +16,8 @@ export async function getInvites(app: FastifyInstance) {
       '/organizations/:slug/invites',
       {
         schema: {
-          tags: ['invites'],
-          summary: 'Get all invite',
+          tags: ['Invites'],
+          summary: 'Get all organization invites',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -51,8 +51,8 @@ export async function getInvites(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'Invite')) {
-          throw new UnauthorizationError(
-            'You are not allowed to get organization invites.',
+          throw new UnauthorizedError(
+            `You're not allowed to get organization invites.`,
           )
         }
 

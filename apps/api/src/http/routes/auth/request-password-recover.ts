@@ -9,8 +9,8 @@ export async function requestPasswordRecover(app: FastifyInstance) {
     '/password/recover',
     {
       schema: {
-        tags: ['auth'],
-        summary: 'Request password recover',
+        tags: ['Auth'],
+        summary: 'Get authenticated user profile',
         body: z.object({
           email: z.string().email(),
         }),
@@ -27,7 +27,7 @@ export async function requestPasswordRecover(app: FastifyInstance) {
       })
 
       if (!userFromEmail) {
-        // We don't want people to know if the email exists or not
+        // We don't want to people to know if the user really exists
         return reply.status(201).send()
       }
 
@@ -38,8 +38,9 @@ export async function requestPasswordRecover(app: FastifyInstance) {
         },
       })
 
-      // TODO: Send e-mail with password recover link
-      console.log('Recover password token: ', code)
+      // Send e-mail with password recover link
+
+      console.log('Password recover token:', code)
 
       return reply.status(201).send()
     },

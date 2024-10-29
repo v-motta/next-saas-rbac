@@ -2,9 +2,9 @@ import { api } from './api-client'
 
 interface GetOrganizationResponse {
   organization: {
+    slug: string
     id: string
     name: string
-    slug: string
     domain: string | null
     shouldAttachUsersByDomain: boolean
     avatarUrl: string | null
@@ -16,7 +16,11 @@ interface GetOrganizationResponse {
 
 export async function getOrganization(org: string) {
   const result = await api
-    .get(`organizations/${org}`)
+    .get(`organizations/${org}`, {
+      next: {
+        tags: ['organization'],
+      },
+    })
     .json<GetOrganizationResponse>()
 
   return result

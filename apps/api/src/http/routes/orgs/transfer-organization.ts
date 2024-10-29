@@ -4,7 +4,8 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -16,7 +17,7 @@ export async function transferOrganization(app: FastifyInstance) {
       '/organizations/:slug/owner',
       {
         schema: {
-          tags: ['organizations'],
+          tags: ['Organizations'],
           summary: 'Transfer organization ownership',
           security: [{ bearerAuth: [] }],
           body: z.object({
@@ -32,7 +33,6 @@ export async function transferOrganization(app: FastifyInstance) {
       },
       async (request, reply) => {
         const { slug } = request.params
-
         const userId = await request.getCurrentUserId()
         const { membership, organization } =
           await request.getUserMembership(slug)
@@ -42,14 +42,14 @@ export async function transferOrganization(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('transfer_ownership', authOrganization)) {
-          throw new UnauthorizationError(
-            "You're not authorized to transfer this organization ownership.",
+          throw new UnauthorizedError(
+            `You're not allowed to transfer this organization ownership.`,
           )
         }
 
         const { transferToUserId } = request.body
 
-        const transferToMembership = await prisma.member.findUnique({
+        const transferMembership = await prisma.member.findUnique({
           where: {
             organizationId_userId: {
               organizationId: organization.id,
@@ -58,9 +58,9 @@ export async function transferOrganization(app: FastifyInstance) {
           },
         })
 
-        if (!transferToMembership) {
-          throw new UnauthorizationError(
-            "You're not a member of this organization",
+        if (!transferMembership) {
+          throw new BadRequestError(
+            'Target user is not a member of this organization.',
           )
         }
 
@@ -69,19 +69,16 @@ export async function transferOrganization(app: FastifyInstance) {
             where: {
               organizationId_userId: {
                 organizationId: organization.id,
-                userId,
+                userId: transferToUserId,
               },
             },
             data: {
-              role: 'admin',
+              role: 'ADMIN',
             },
           }),
-
           prisma.organization.update({
             where: { id: organization.id },
-            data: {
-              ownerId: transferToUserId,
-            },
+            data: { ownerId: transferToUserId },
           }),
         ])
 

@@ -4,7 +4,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -16,12 +16,12 @@ export async function updateMember(app: FastifyInstance) {
       '/organizations/:slug/members/:memberId',
       {
         schema: {
-          tags: ['members'],
+          tags: ['Members'],
           summary: 'Update a member',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
-            memberId: z.string(),
+            memberId: z.string().uuid(),
           }),
           body: z.object({
             role: roleSchema,
@@ -40,8 +40,8 @@ export async function updateMember(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('update', 'User')) {
-          throw new UnauthorizationError(
-            'You are not allowed to update this member',
+          throw new UnauthorizedError(
+            `You're not allowed to update this member.`,
           )
         }
 

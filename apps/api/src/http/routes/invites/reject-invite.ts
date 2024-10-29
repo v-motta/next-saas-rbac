@@ -3,9 +3,8 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
-
-import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function rejectInvite(app: FastifyInstance) {
   app
@@ -15,7 +14,7 @@ export async function rejectInvite(app: FastifyInstance) {
       '/invites/:inviteId/reject',
       {
         schema: {
-          tags: ['invites'],
+          tags: ['Invites'],
           summary: 'Reject an invite',
           params: z.object({
             inviteId: z.string().uuid(),
@@ -54,7 +53,9 @@ export async function rejectInvite(app: FastifyInstance) {
         }
 
         await prisma.invite.delete({
-          where: { id: inviteId },
+          where: {
+            id: invite.id,
+          },
         })
 
         return reply.status(204).send()

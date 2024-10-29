@@ -25,7 +25,6 @@ const appAbilitiesSchema = z.union([
   organizationSubject,
   inviteSubject,
   billingSubject,
-
   z.tuple([z.literal('manage'), z.literal('all')]),
 ])
 

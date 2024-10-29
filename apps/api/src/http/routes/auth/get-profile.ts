@@ -3,9 +3,8 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
-
-import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function getProfile(app: FastifyInstance) {
   app
@@ -15,16 +14,16 @@ export async function getProfile(app: FastifyInstance) {
       '/profile',
       {
         schema: {
-          tags: ['profile'],
+          tags: ['Auth'],
           summary: 'Get authenticated user profile',
           security: [{ bearerAuth: [] }],
           response: {
             200: z.object({
               user: z.object({
-                id: z.string(),
+                id: z.string().uuid(),
                 name: z.string().nullable(),
-                email: z.string(),
-                avatarUrl: z.string().nullable(),
+                email: z.string().email(),
+                avatarUrl: z.string().url().nullable(),
               }),
             }),
           },
@@ -46,7 +45,7 @@ export async function getProfile(app: FastifyInstance) {
         })
 
         if (!user) {
-          throw new BadRequestError('User not found')
+          throw new BadRequestError('User not found.')
         }
 
         return reply.send({ user })

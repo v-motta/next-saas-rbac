@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -16,8 +16,8 @@ export async function getProject(app: FastifyInstance) {
       '/organizations/:orgSlug/projects/:projectSlug',
       {
         schema: {
-          tags: ['projects'],
-          summary: 'Get a project',
+          tags: ['Projects'],
+          summary: 'Get project details',
           security: [{ bearerAuth: [] }],
           params: z.object({
             orgSlug: z.string(),
@@ -30,9 +30,9 @@ export async function getProject(app: FastifyInstance) {
                 description: z.string(),
                 name: z.string(),
                 slug: z.string(),
-                ownerId: z.string(),
                 avatarUrl: z.string().url().nullable(),
                 organizationId: z.string().uuid(),
+                ownerId: z.string().uuid(),
                 owner: z.object({
                   id: z.string().uuid(),
                   name: z.string().nullable(),
@@ -52,7 +52,9 @@ export async function getProject(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'Project')) {
-          throw new UnauthorizationError('You are not allowed see this project')
+          throw new UnauthorizedError(
+            `You're not allowed to see this projects.`,
+          )
         }
 
         const project = await prisma.project.findUnique({
@@ -68,6 +70,7 @@ export async function getProject(app: FastifyInstance) {
               select: {
                 id: true,
                 name: true,
+                email: true,
                 avatarUrl: true,
               },
             },
@@ -79,10 +82,10 @@ export async function getProject(app: FastifyInstance) {
         })
 
         if (!project) {
-          throw new BadRequestError('Project not found')
+          throw new BadRequestError('Project not found.')
         }
 
-        return reply.status(200).send({ project })
+        return reply.send({ project })
       },
     )
 }

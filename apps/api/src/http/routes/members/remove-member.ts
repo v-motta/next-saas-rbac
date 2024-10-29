@@ -3,7 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -15,13 +15,14 @@ export async function removeMember(app: FastifyInstance) {
       '/organizations/:slug/members/:memberId',
       {
         schema: {
-          tags: ['members'],
-          summary: 'Remove a member from organization',
+          tags: ['Members'],
+          summary: 'Remove a member from the organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
-            memberId: z.string(),
+            memberId: z.string().uuid(),
           }),
+
           response: {
             204: z.null(),
           },
@@ -36,8 +37,8 @@ export async function removeMember(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('delete', 'User')) {
-          throw new UnauthorizationError(
-            'You are not allowed to remove this member from this organization',
+          throw new UnauthorizedError(
+            `You're not allowed to remove this member from organization.`,
           )
         }
 

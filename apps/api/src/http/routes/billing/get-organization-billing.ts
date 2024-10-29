@@ -3,10 +3,9 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
-
-import { UnauthorizationError } from '../_errors/unauthorized-error'
 
 export async function getOrganizationBilling(app: FastifyInstance) {
   app
@@ -16,7 +15,7 @@ export async function getOrganizationBilling(app: FastifyInstance) {
       '/organizations/:slug/billing',
       {
         schema: {
-          tags: ['billing'],
+          tags: ['Billing'],
           summary: 'Get billing information from organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
@@ -50,8 +49,8 @@ export async function getOrganizationBilling(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('get', 'Billing')) {
-          throw new UnauthorizationError(
-            'You are not allowed to get billing details from this organization.',
+          throw new UnauthorizedError(
+            `You're not allowed to get billing details from this organization.`,
           )
         }
 
@@ -59,10 +58,9 @@ export async function getOrganizationBilling(app: FastifyInstance) {
           prisma.member.count({
             where: {
               organizationId: organization.id,
-              role: { not: 'billing' },
+              role: { not: 'BILLING' },
             },
           }),
-
           prisma.project.count({
             where: {
               organizationId: organization.id,

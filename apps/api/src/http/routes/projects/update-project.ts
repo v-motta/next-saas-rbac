@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -17,7 +17,7 @@ export async function updateProject(app: FastifyInstance) {
       '/organizations/:slug/projects/:projectId',
       {
         schema: {
-          tags: ['projects'],
+          tags: ['Projects'],
           summary: 'Update a project',
           security: [{ bearerAuth: [] }],
           body: z.object({
@@ -47,15 +47,15 @@ export async function updateProject(app: FastifyInstance) {
         })
 
         if (!project) {
-          throw new BadRequestError('Project not found')
+          throw new BadRequestError('Project not found.')
         }
 
         const { cannot } = getUserPermissions(userId, membership.role)
         const authProject = projectSchema.parse(project)
 
         if (cannot('update', authProject)) {
-          throw new UnauthorizationError(
-            'You are not allowed to update this project',
+          throw new UnauthorizedError(
+            `You're not allowed to update this project.`,
           )
         }
 

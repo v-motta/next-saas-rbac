@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
-import { UnauthorizationError } from '@/http/routes/_errors/unauthorized-error'
+import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
@@ -17,8 +17,8 @@ export async function updateOrganization(app: FastifyInstance) {
       '/organizations/:slug',
       {
         schema: {
-          tags: ['organizations'],
-          summary: 'Update an organization',
+          tags: ['Organizations'],
+          summary: 'Update organization details',
           security: [{ bearerAuth: [] }],
           body: z.object({
             name: z.string(),
@@ -35,7 +35,6 @@ export async function updateOrganization(app: FastifyInstance) {
       },
       async (request, reply) => {
         const { slug } = request.params
-
         const userId = await request.getCurrentUserId()
         const { membership, organization } =
           await request.getUserMembership(slug)
@@ -47,8 +46,8 @@ export async function updateOrganization(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('update', authOrganization)) {
-          throw new UnauthorizationError(
-            "You're not authorized to update this organization",
+          throw new UnauthorizedError(
+            `You're not allowed to update this organization.`,
           )
         }
 
@@ -64,13 +63,15 @@ export async function updateOrganization(app: FastifyInstance) {
 
           if (organizationByDomain) {
             throw new BadRequestError(
-              'Organization with this domain already exists',
+              'Another organization with same domain already exists.',
             )
           }
         }
 
         await prisma.organization.update({
-          where: { id: organization.id },
+          where: {
+            id: organization.id,
+          },
           data: {
             name,
             domain,

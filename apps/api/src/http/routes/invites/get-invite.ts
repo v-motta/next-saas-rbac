@@ -3,16 +3,15 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
-
-import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function getInvite(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     '/invites/:inviteId',
     {
       schema: {
-        tags: ['invites'],
+        tags: ['Invites'],
         summary: 'Get an invite',
         params: z.object({
           inviteId: z.string().uuid(),
@@ -24,6 +23,9 @@ export async function getInvite(app: FastifyInstance) {
               role: roleSchema,
               email: z.string().email(),
               createdAt: z.date(),
+              organization: z.object({
+                name: z.string(),
+              }),
               author: z
                 .object({
                   id: z.string().uuid(),
@@ -31,9 +33,6 @@ export async function getInvite(app: FastifyInstance) {
                   avatarUrl: z.string().url().nullable(),
                 })
                 .nullable(),
-              organization: z.object({
-                name: z.string(),
-              }),
             }),
           }),
         },
@@ -55,7 +54,6 @@ export async function getInvite(app: FastifyInstance) {
             select: {
               id: true,
               name: true,
-              email: true,
               avatarUrl: true,
             },
           },

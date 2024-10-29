@@ -1,23 +1,23 @@
 import { env } from '@saas/env'
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import type { FastifyInstance } from 'fastify'
+import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
 
-import { BadRequestError } from '../_errors/bad-request-error'
-
-export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
-  app.post(
+export async function authenticateWithGithub(app: FastifyInstance) {
+  app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions/github',
     {
       schema: {
-        tags: ['auth'],
+        tags: ['Auth'],
         summary: 'Authenticate with GitHub',
         body: z.object({
           code: z.string(),
         }),
         response: {
-          200: z.object({
+          201: z.object({
             token: z.string(),
           }),
         },
@@ -82,7 +82,7 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
 
       if (email === null) {
         throw new BadRequestError(
-          'Your Github account must have and email to authenticate.',
+          'Your GitHub account must have an email to authenticate.',
         )
       }
 
@@ -93,8 +93,8 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
       if (!user) {
         user = await prisma.user.create({
           data: {
-            name,
             email,
+            name,
             avatarUrl,
           },
         })
@@ -130,7 +130,7 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
         },
       )
 
-      return reply.status(200).send({ token })
+      return reply.status(201).send({ token })
     },
   )
 }
