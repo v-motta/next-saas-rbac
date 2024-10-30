@@ -6,8 +6,6 @@ import { z } from 'zod'
 import { getCookieOrganization } from '@/auth/auth'
 import { createProject } from '@/http/create-project'
 
-// import { createProject } from '@/http/create-project'
-
 const projectSchema = z.object({
   name: z
     .string()
