@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { getOrganization } from '@/http/get-organization'
+import { getOrganization } from '@/http/organizations/get-organization'
 
 import { OrganizationForm } from '../../organization-form'
 import { Billing } from './billing'

@@ -73,7 +73,7 @@ export async function transferOrganization(app: FastifyInstance) {
               },
             },
             data: {
-              role: 'ADMIN',
+              role: 'admin',
             },
           }),
           prisma.organization.update({

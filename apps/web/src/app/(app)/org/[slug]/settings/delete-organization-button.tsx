@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { getCookieOrganization } from '@/auth/auth'
 import { Button } from '@/components/ui/button'
-import { deleteOrganization } from '@/http/delete-organization'
+import { deleteOrganization } from '@/http/organizations/delete-organization'
 
 export function DeleteOrganizationButton() {
   async function deleteOrganizationAction() {

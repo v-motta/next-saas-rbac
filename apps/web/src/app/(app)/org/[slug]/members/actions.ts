@@ -7,8 +7,8 @@ import { z } from 'zod'
 
 import { getCookieOrganization } from '@/auth/auth'
 import { createInvite } from '@/http/invites/create-invite'
-import { removeMember } from '@/http/members/remove-member'
 import { revokeInvite } from '@/http/invites/revoke-invite'
+import { removeMember } from '@/http/members/remove-member'
 import { updateMember } from '@/http/members/update-member'
 
 const inviteSchema = z.object({

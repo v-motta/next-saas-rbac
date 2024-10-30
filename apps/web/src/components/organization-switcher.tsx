@@ -2,7 +2,7 @@ import { ChevronsUpDown, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
 
 import { getCookieOrganization } from '@/auth/auth'
-import { getOrganizations } from '@/http/get-organizations'
+import { getOrganizations } from '@/http/organizations/get-organizations'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
