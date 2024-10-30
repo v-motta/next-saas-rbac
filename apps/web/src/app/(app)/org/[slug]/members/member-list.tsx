@@ -6,7 +6,7 @@ import { ability, getCookieOrganization } from '@/auth/auth'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { getMembers } from '@/http/get-members'
+import { getMembers } from '@/http/members/get-members'
 import { getMembership } from '@/http/get-membership'
 import { getOrganization } from '@/http/get-organization'
 

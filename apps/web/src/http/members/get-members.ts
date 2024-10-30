@@ -1,6 +1,6 @@
 import type { Role } from '@saas/auth'
 
-import { api } from './api-client'
+import { api } from '../api-client'
 
 export interface GetMembersResponse {
   members: {
